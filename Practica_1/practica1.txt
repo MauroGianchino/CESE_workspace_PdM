@@ -1,0 +1,38 @@
+Punto 1: Se cambia delay a 200ms.
+
+Punto 2: Creo dos variables. Una controla el delay y la otra el flag que me indica en que delay estoy ( 200 o 500).
+
+uint32_t delay_time = 200;
+uint32_t flag = 0;
+
+Creo un if dentro del chequeo del press del boton para saber en que flag estoy para cambiar el delay.
+
+if (!HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin)){
+		  if (flag == 0){
+			  delay_time = 500;
+			  flag =1;
+		  }
+		  else
+		  {
+			  delay_time=200;
+			  flag == 0;
+		  }
+  
+Preguntas:
+
+-¿De qué serviría usar un array de “tiempos” en el programa? ¿Qué pasa con nuestro programa si nos piden agregar/sacar/cambiar un tiempo de encendido? 
+
+*Usar un array ayudaria en hacer un loop que vaya iterando por el array de tiempos y de esa manera evitar crear nuevas variables y considerar mas casos.
+
+-¿Cómo responde el programa a las pulsaciones, hay falsos positivos o pulsaciones no detectadas?
+
+*Si, hay pulsaciones no detectadas debido al rebote que existe (bouncing) dado el pulsador fisico.
+
+-¿Cuál es el mejor momento para leer el pulsador, luego de un ciclo completo de la secuencia o después de encender y apagar el led? ¿Qué diferencia hay entre estas alternativas?
+
+*Es mejor pulsarlo luego de encendido o apagado el led ( en realidad antes que cambie de estado).
+
+-¿Cambiaría las respuestas a las preguntas anteriores si el tiempo de encendido del led fuera sensiblemente más grande, 2 segundos por ejemplo? ¿Y si fuera  sensiblemente más chico, 50 ms por ejemplo?
+
+*Si el tiempo fuera mucho mas grande, se notaria mas los momentos donde uno debe pulsar para cambiar el tiempo de encendido del led. SI fuese mucho mas chico, pasaria desapercibido ya que se consulta mucho mas rapido el estado del boton.
+
