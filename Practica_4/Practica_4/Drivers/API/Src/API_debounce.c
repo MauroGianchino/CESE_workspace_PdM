@@ -55,7 +55,7 @@ bool_t readKey(void){
 
 void debounceFSM_init(void){
 
-	estadoActual = BUTTON_UP;
+	estadoActual = BUTTON_UP; //estado inicial
 	delayInit(&delayFSM, DELAY_DEBOUNCE);
 
 }
