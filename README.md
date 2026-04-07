@@ -32,6 +32,13 @@ Este repositorio contiene la resolución de las guías prácticas de la cursada.
 
 ---
 
+### 📁 Práctica 5
+* **Descripción:** MEF de comandos - UART
+* **Estado:** Finalizado.
+* [Ir al código de la Práctica 5](./Practica_5)
+
+---
+
 ## 🛠️ Herramientas Utilizadas
 * **Hardware:** NUCLEO-STM32F446RET6
 * **IDE:** STM32CubeIDE

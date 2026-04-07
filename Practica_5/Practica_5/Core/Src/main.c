@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "API_uart.h"
+#include "API_cmdparser.h"
+#include "API_delay.h"
 #include <stdbool.h>
 /* USER CODE END Includes */
 
@@ -90,7 +92,9 @@ int main(void)
   MX_GPIO_Init();
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  char buff[] = "test";
+  //delay_t delay;
+  //delayInit(&delay,1000);
+  cmdParserInit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -98,10 +102,8 @@ int main(void)
   while (1)
   {
 
-	  uartInit();
-	  uartSendString((uint8_t*)buff);
-	  uartSendStringSize((uint8_t*)buff, 3);
-	  HAL_Delay(2000);
+	  cmdPoll();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
