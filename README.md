@@ -30,8 +30,6 @@ Este repositorio contiene la resolución de las guías prácticas de la cursada.
 * **Estado:** Finalizado.
 * [Ir al código de la Práctica 4](./Practica_4)
 
----
-
 ### 📁 Práctica 5
 * **Descripción:** MEF de comandos - UART
 * **Estado:** Finalizado.
