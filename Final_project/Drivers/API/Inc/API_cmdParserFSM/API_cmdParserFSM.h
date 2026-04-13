@@ -1,0 +1,13 @@
+/*
+ * API_cmdParserFSM.h
+ *
+ *  Created on: 12 abr 2026
+ *      Author: Mauro
+ */
+
+#ifndef API_INC_API_CMDPARSERFSM_API_CMDPARSERFSM_H_
+#define API_INC_API_CMDPARSERFSM_API_CMDPARSERFSM_H_
+
+
+
+#endif /* API_INC_API_CMDPARSERFSM_API_CMDPARSERFSM_H_ */
