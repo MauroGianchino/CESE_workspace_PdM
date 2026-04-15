@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "API_TMP117.h"
 #include "API_GPIO.h"
-#include "API_I2C.h"
+#include "API_comms.h"
 #include "API_TLC5923.h"
 /* USER CODE END Includes */
 
@@ -45,7 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 //I2C_HandleTypeDef hi2c1;
 
-SPI_HandleTypeDef hspi2;
+//SPI_HandleTypeDef hspi2;
 
 //UART_HandleTypeDef huart2;
 
@@ -57,8 +57,8 @@ SPI_HandleTypeDef hspi2;
 void SystemClock_Config(void);
 //static void MX_GPIO_Init(void);
 //static void MX_I2C1_Init(void);
-static void MX_SPI2_Init(void);
-static void MX_USART2_UART_Init(void);
+//static void MX_SPI2_Init(void);
+//static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -98,7 +98,7 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   I2C1_Init();
-  MX_SPI2_Init();
+  SPI2_Init();
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_StatusTypeDef status;
@@ -246,8 +246,8 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-static void MX_SPI2_Init(void)
-{
+//static void MX_SPI2_Init(void)
+//{
 
   /* USER CODE BEGIN SPI2_Init 0 */
 
@@ -257,27 +257,27 @@ static void MX_SPI2_Init(void)
 
   /* USER CODE END SPI2_Init 1 */
   /* SPI2 parameter configuration*/
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_SOFT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 10;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
+//hspi2.Instance = SPI2;
+//hspi2.Init.Mode = SPI_MODE_MASTER;
+//hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+//hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
+//hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+//hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+//hspi2.Init.NSS = SPI_NSS_SOFT;
+//hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+//hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+//hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+//hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+//hspi2.Init.CRCPolynomial = 10;
+//if (HAL_SPI_Init(&hspi2) != HAL_OK)
+//{
+//  Error_Handler();
+//}
   /* USER CODE BEGIN SPI2_Init 2 */
 
   /* USER CODE END SPI2_Init 2 */
 
-}
+//}
 
 /**
   * @brief USART2 Initialization Function
@@ -369,17 +369,17 @@ static void MX_SPI2_Init(void)
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
-void Error_Handler(void)
-{
+//void Error_Handler(void)
+//{
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+//__disable_irq();
+//while (1)
+//{
+//}
   /* USER CODE END Error_Handler_Debug */
-}
-#ifdef USE_FULL_ASSERT
+//}
+//#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.
@@ -387,11 +387,11 @@ void Error_Handler(void)
   * @param  line: assert_param error line source number
   * @retval None
   */
-void assert_failed(uint8_t *file, uint32_t line)
-{
+//void assert_failed(uint8_t *file, uint32_t line)
+//{
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
      ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */
+//}
+//#endif /* USE_FULL_ASSERT */

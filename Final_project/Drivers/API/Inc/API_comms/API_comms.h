@@ -1,15 +1,18 @@
 /*
- * API_uart.h
+ * API_comms.h
  *
- *  Created on: 9 abr 2026
+ *  Created on: 14 abr 2026
  *      Author: Mauro
  */
 
-#ifndef API_INC_API_UART_H_
-#define API_INC_API_UART_H_
+#ifndef API_INC_API_COMMS_API_COMMS_H_
+#define API_INC_API_COMMS_API_COMMS_H_
 
+#include "stm32f4xx_hal.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 
 
 /**
@@ -41,4 +44,11 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size);
 bool uartReceiveStringSize(uint8_t * pstring, uint16_t size);
 
 
-#endif /* API_INC_API_UART_H_ */
+void I2C1_Init(void);
+
+void SPI2_Init(void);
+
+void Error_Handler(void);
+
+
+#endif /* API_INC_API_COMMS_API_COMMS_H_ */

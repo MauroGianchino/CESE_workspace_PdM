@@ -10,7 +10,7 @@
 
 #include "string.h"
 #include "API_GPIO.h"
-#include "API_uart.h"
+#include "API_comms.h"
 
 #define CMD_MAX_LINE 64 //incluye '/0'
 #define CMD_MAX_TOKENS 3 //COMANDO + maximo 2 argumentos
