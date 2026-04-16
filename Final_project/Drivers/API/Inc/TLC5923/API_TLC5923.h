@@ -14,10 +14,10 @@
 #include <stdbool.h>
 #include "API_GPIO.h"
 
-void setBlank(void);
-void resetBlank(void);
-void setModeDC(void);
-void setModeOnOff(void);
-bool setOutputs(uint16_t outputs);
+void TLC5923_disableOutputs(void);
+void TLC5923_enableOutputs(void);
+void TLC5923_setModeDC(void);
+void TLC5923_setModeOnOff(void);
+bool TLC5923_setOutputs(uint16_t outputs);
 
 #endif /* API_INC_API_TLC5923_H_ */

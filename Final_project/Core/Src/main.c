@@ -25,6 +25,7 @@
 #include "API_GPIO.h"
 #include "API_comms.h"
 #include "API_TLC5923.h"
+#include "API_controlFSM.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +49,7 @@
 //SPI_HandleTypeDef hspi2;
 
 //UART_HandleTypeDef huart2;
+
 
 /* USER CODE BEGIN PV */
 
@@ -102,29 +104,38 @@ int main(void)
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_StatusTypeDef status;
-  uint16_t data = 0b0101010101101010;
+  //uint16_t data = 0b0101010101101010;
   uint8_t flag = 0;
-  uint16_t temp_id=0;
-  float temp;
+  //uint16_t temp_id=0;
+  //float temp;
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  resetBlank();
-  setModeOnOff();
-  setOutputs(data);
+  //controlInit();
+  uint16_t test_data = 0b0;
+	TLC5923_setModeOnOff();
+	TLC5923_enableOutputs();
+	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+
   while (1)
   {
+
+
+	  //TLC5923_setOutputs(test_data);
+	  //HAL_Delay(500);
+
+	  //controlPoll();
 	  if(!HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin)){
 
 	  		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
 	  		  if(flag==1){
-	  			resetBlank();
+	  			TLC5923_enableOutputs();
 	  			flag = 0;
 	  		  }
 	  		  else{
-	  			setBlank();
+	  			TLC5923_disableOutputs();
 	  			flag = 1;
 	  		  }
 
@@ -133,25 +144,20 @@ int main(void)
 	  		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
 
 	  }
-
-
-	  data += 64;
-	  setOutputs(data);
-
 	  HAL_Delay(500);
 
-	  TMP117_readID(&temp_id);
-
-	  if(temp_id == 0x117)
+	  if(TLC5923_setOutputs(test_data))
 	  {
-
-
+		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
 	  }
+	  test_data += 64;
 
-	  if(TMP117_readTemperature(&temp) == true)
-	  {
-		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  }
+
+	  HAL_Delay(500);
+	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
+
+
+
 
     /* USER CODE END WHILE */
 
@@ -207,191 +213,3 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief I2C1 Initialization Function
-  * @param None
-  * @retval None
-  */
-//static void MX_I2C1_Init(void)
-//{
-
-  /* USER CODE BEGIN I2C1_Init 0 */
-
-  /* USER CODE END I2C1_Init 0 */
-
-  /* USER CODE BEGIN I2C1_Init 1 */
-
-  /* USER CODE END I2C1_Init 1 */
-//hi2c1.Instance = I2C1;
-//hi2c1.Init.ClockSpeed = 400000;
-//hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-//hi2c1.Init.OwnAddress1 = 0;
-//hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-//hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-//hi2c1.Init.OwnAddress2 = 0;
-//hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-//hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-//if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-//{
-//  Error_Handler();
-//}
-  /* USER CODE BEGIN I2C1_Init 2 */
-
-  /* USER CODE END I2C1_Init 2 */
-
-//}
-
-/**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
-//static void MX_SPI2_Init(void)
-//{
-
-  /* USER CODE BEGIN SPI2_Init 0 */
-
-  /* USER CODE END SPI2_Init 0 */
-
-  /* USER CODE BEGIN SPI2_Init 1 */
-
-  /* USER CODE END SPI2_Init 1 */
-  /* SPI2 parameter configuration*/
-//hspi2.Instance = SPI2;
-//hspi2.Init.Mode = SPI_MODE_MASTER;
-//hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-//hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
-//hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-//hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-//hspi2.Init.NSS = SPI_NSS_SOFT;
-//hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
-//hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-//hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-//hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-//hspi2.Init.CRCPolynomial = 10;
-//if (HAL_SPI_Init(&hspi2) != HAL_OK)
-//{
-//  Error_Handler();
-//}
-  /* USER CODE BEGIN SPI2_Init 2 */
-
-  /* USER CODE END SPI2_Init 2 */
-
-//}
-
-/**
-  * @brief USART2 Initialization Function
-  * @param None
-  * @retval None
-  */
-//static void MX_USART2_UART_Init(void)
-//{
-
-  /* USER CODE BEGIN USART2_Init 0 */
-
-  /* USER CODE END USART2_Init 0 */
-
-  /* USER CODE BEGIN USART2_Init 1 */
-
-  /* USER CODE END USART2_Init 1 */
-	//huart2.Instance = USART2;
-	//huart2.Init.BaudRate = 115200;
-	//huart2.Init.WordLength = UART_WORDLENGTH_8B;
-	//huart2.Init.StopBits = UART_STOPBITS_1;
-	//huart2.Init.Parity = UART_PARITY_NONE;
-	//huart2.Init.Mode = UART_MODE_TX_RX;
-	//huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-	//huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-	//if (HAL_UART_Init(&huart2) != HAL_OK)
-	//{
-	//Error_Handler();
-	//}
-  /* USER CODE BEGIN USART2_Init 2 */
-
-  /* USER CODE END USART2_Init 2 */
-
-	//}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-//static void MX_GPIO_Init(void)
-//{
-//GPIO_InitTypeDef GPIO_InitStruct = {0};
-  /* USER CODE BEGIN MX_GPIO_Init_1 */
-
-  /* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-//__HAL_RCC_GPIOC_CLK_ENABLE();
-//__HAL_RCC_GPIOH_CLK_ENABLE();
-//__HAL_RCC_GPIOA_CLK_ENABLE();
-//__HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-//HAL_GPIO_WritePin(GPIOA, LD2_Pin|MODE_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-//HAL_GPIO_WritePin(GPIOB, XLAT_Pin|BLANK_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : B1_Pin */
-//GPIO_InitStruct.Pin = B1_Pin;
-// GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-//GPIO_InitStruct.Pull = GPIO_NOPULL;
-//HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LD2_Pin MODE_Pin */
-//GPIO_InitStruct.Pin = LD2_Pin|MODE_Pin;
-//GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-// GPIO_InitStruct.Pull = GPIO_NOPULL;
-//GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : XLAT_Pin BLANK_Pin */
-//GPIO_InitStruct.Pin = XLAT_Pin|BLANK_Pin;
-//GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//GPIO_InitStruct.Pull = GPIO_NOPULL;
-// GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /* USER CODE BEGIN MX_GPIO_Init_2 */
-
-  /* USER CODE END MX_GPIO_Init_2 */
-//}
-
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-//void Error_Handler(void)
-//{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-//__disable_irq();
-//while (1)
-//{
-//}
-  /* USER CODE END Error_Handler_Debug */
-//}
-//#ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-//void assert_failed(uint8_t *file, uint32_t line)
-//{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-//}
-//#endif /* USE_FULL_ASSERT */
