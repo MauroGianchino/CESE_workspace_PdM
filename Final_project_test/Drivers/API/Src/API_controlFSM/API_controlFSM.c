@@ -18,7 +18,6 @@ typedef enum{
 
 static controlState_t statusControlFSM;
 
-extern SPI_HandleTypeDef hspi2;
 
 static delay_t delay;
 
@@ -28,7 +27,7 @@ float temperature; //variable que guarda la temperatura leida
 
 float maxTemp = 35; //variable que guarda el valor alto del rango de temperatura
 
-float minTemp = 25; //variable que guarda  el valor bajo del rango de temperatura
+float minTemp = 30; //variable que guarda  el valor bajo del rango de temperatura
 
 float quantityLeds = 8; //cantidad de leds que se iluminan. variable que se usa apra el paso de temperatura dentro del rango
 
@@ -39,19 +38,7 @@ void controlInit(void){
 	delayInit(&delay,durationDelay);
 	TLC5923_setModeDC();
 	TLC5923_enableOutputs();
-	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
-	HAL_StatusTypeDef status;
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
-
-	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_SET);
-	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
+	TLC5923_setOutputsDC(data0);
 	TLC5923_setModeOnOff();
 }
 
@@ -154,7 +141,7 @@ void normalSequence()
 		data = 0b1010101001010101;
 	}
 
-	TLC5923_setOutputs(data);
+	TLC5923_setOutputsOnOff(data);
 
 }
 
@@ -162,7 +149,7 @@ void coldSequence()
 {
 	uint16_t data = 0b0101010110101010;
 
-	if(TLC5923_setOutputs(data))
+	if(TLC5923_setOutputsOnOff(data))
 	{
 		return;
 	}

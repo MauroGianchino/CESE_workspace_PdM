@@ -18,6 +18,7 @@ void TLC5923_disableOutputs(void);
 void TLC5923_enableOutputs(void);
 void TLC5923_setModeDC(void);
 void TLC5923_setModeOnOff(void);
-bool TLC5923_setOutputs(uint16_t outputs);
+bool TLC5923_setOutputsOnOff(uint16_t outputs);
+bool TLC5923_setOutputsDC(uint16_t outputs);
 
 #endif /* API_INC_API_TLC5923_H_ */

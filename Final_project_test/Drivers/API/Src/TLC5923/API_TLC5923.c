@@ -30,7 +30,7 @@ void TLC5923_setModeOnOff()
 	HAL_GPIO_WritePin(GPIOA, MODE_Pin, GPIO_PIN_RESET);
 }
 
-bool TLC5923_setOutputs(uint16_t outputs)
+bool TLC5923_setOutputsOnOff(uint16_t outputs)
 {
 	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
 
@@ -47,6 +47,29 @@ bool TLC5923_setOutputs(uint16_t outputs)
 	{
 		return false;
 	}
+
+
+}
+
+bool TLC5923_setOutputsDC(uint16_t outputs)
+{
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
+
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+	writeData((uint8_t*)&outputs);
+
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_SET);
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
+
+	return true;
+
 
 
 }
