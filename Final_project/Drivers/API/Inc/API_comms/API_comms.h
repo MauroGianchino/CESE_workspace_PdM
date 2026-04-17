@@ -46,6 +46,7 @@ bool uartReceiveStringSize(uint8_t * pstring, uint16_t size);
 
 void I2C1_Init(void);
 
+
 void SPI2_Init(void);
 
 void Error_Handler(void);

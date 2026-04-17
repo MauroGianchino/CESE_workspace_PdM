@@ -103,7 +103,7 @@ int main(void)
   SPI2_Init();
   //MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_StatusTypeDef status;
+  //HAL_StatusTypeDef status;
   //uint16_t data = 0b0101010101101010;
   uint8_t flag = 0;
   //uint16_t temp_id=0;
@@ -113,11 +113,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  //controlInit();
-  uint16_t test_data = 0b0;
+  controlInit();
+ /* uint16_t test_data = 0b0;
 	TLC5923_setModeOnOff();
 	TLC5923_enableOutputs();
-	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);*/
 
   while (1)
   {
@@ -126,7 +126,7 @@ int main(void)
 	  //TLC5923_setOutputs(test_data);
 	  //HAL_Delay(500);
 
-	  //controlPoll();
+	  controlPoll();
 	  if(!HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin)){
 
 	  		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
@@ -144,9 +144,9 @@ int main(void)
 	  		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
 
 	  }
-	  HAL_Delay(500);
+	  HAL_Delay(100);
 
-	  if(TLC5923_setOutputs(test_data))
+	 /* if(TLC5923_setOutputs(test_data))
 	  {
 		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
 	  }
@@ -154,7 +154,7 @@ int main(void)
 
 
 	  HAL_Delay(500);
-	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);*/
 
 
 

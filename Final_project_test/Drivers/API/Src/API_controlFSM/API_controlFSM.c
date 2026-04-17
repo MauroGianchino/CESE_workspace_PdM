@@ -9,8 +9,6 @@
 #include "API_controlFSM.h"
 
 
-
-
 typedef enum{
 	CONTROL_IDLE = 0,
 	CONTROL_READ_TEMPERATURE,
@@ -28,9 +26,9 @@ static tick_t durationDelay = 1000; //1 segundo de tiempo base entre mediciones 
 
 float temperature; //variable que guarda la temperatura leida
 
-float maxTemp = 40; //variable que guarda el valor alto del rango de temperatura
+float maxTemp = 35; //variable que guarda el valor alto del rango de temperatura
 
-float minTemp = 20; //variable que guarda  el valor bajo del rango de temperatura
+float minTemp = 25; //variable que guarda  el valor bajo del rango de temperatura
 
 float quantityLeds = 8; //cantidad de leds que se iluminan. variable que se usa apra el paso de temperatura dentro del rango
 
@@ -41,7 +39,7 @@ void controlInit(void){
 	delayInit(&delay,durationDelay);
 	TLC5923_setModeDC();
 	TLC5923_enableOutputs();
-	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
 	HAL_StatusTypeDef status;
 	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
 	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
@@ -51,9 +49,9 @@ void controlInit(void){
 	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
 	status = HAL_SPI_Transmit(&hspi2, /*(i % 2 ? &data0 : &data1)*/(uint8_t*)&data0, 1, HAL_MAX_DELAY);
 
-	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_SET);
 	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
 	TLC5923_setModeOnOff();
 }
 

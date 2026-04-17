@@ -32,14 +32,14 @@ void TLC5923_setModeOnOff()
 
 bool TLC5923_setOutputs(uint16_t outputs)
 {
-	HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
 
 	if(writeData((uint8_t*)&outputs) == true)
 	{
 		HAL_Delay(1);
-		HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_SET);
 		HAL_Delay(1);
-		HAL_GPIO_WritePin(GPIOB, XLAT_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(GPIOA, XLAT_Pin, GPIO_PIN_RESET);
 
 		return true;
 	}

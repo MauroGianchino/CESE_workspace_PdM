@@ -10,6 +10,7 @@
 
 I2C_HandleTypeDef hi2c1;
 
+
 SPI_HandleTypeDef hspi2;
 
 UART_HandleTypeDef huart2;
