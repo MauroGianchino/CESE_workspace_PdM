@@ -18,9 +18,14 @@
 
 void controlInit(void);
 void controlPoll(void);
-void controlProcess(void);
-void normalSequence(void);
-void coldSequence(void);
-void errorSequence(void);
+static void controlProcess(void);
+static void normalSequence(void);
+static void coldSequence(void);
+static void errorSequence(void);
+static void hotSequence(void);
+void setMaxTemp(float);
+void setMinTemp(float);
+float getMaxTemp(void);
+float getMinTemp(void);
 
 #endif /* API_INC_API_CONTROLFSM_API_CONTROLFSM_H_ */

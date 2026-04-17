@@ -141,7 +141,7 @@ int main(void)
 	  		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
 
 	  }
-	  HAL_Delay(100);
+	  //HAL_Delay(100);
 
 	 /* if(TLC5923_setOutputs(test_data))
 	  {
