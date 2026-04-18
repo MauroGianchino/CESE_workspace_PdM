@@ -23,12 +23,12 @@ bool readRegister(uint16_t address, uint8_t regAddress, uint8_t *pData)
 
 	status = HAL_I2C_Master_Transmit(&hi2c3, address, &regAddress,
 	SIZE_ADDRESS_REGISTER,
-	I2C_TIMEOUT);
+	I2C_TIMEOUT); //transmito primero el address del registro que quiero leer
 
 	if (status == HAL_OK)
 	{
 		status = HAL_I2C_Master_Receive(&hi2c3, address, pData, SIZE_REGISTER,
-		I2C_TIMEOUT); // Timeout de 100ms
+		I2C_TIMEOUT); //recibo la data del registro seteado anteriormente
 		if (status == HAL_OK)
 		{
 			return true;
@@ -44,16 +44,13 @@ bool readRegister(uint16_t address, uint8_t regAddress, uint8_t *pData)
 		return false;
 	}
 
-	/*status = HAL_I2C_Mem_Read(&hi2c1, DevAddress, MemAddress,
-	 I2C_MEMADD_SIZE_8BIT, pData, SIZE, I2C_TIMEOUT);*/
-
 }
 
 bool writeRegister(uint16_t address, uint8_t regAddress, uint16_t data)
 {
 	HAL_StatusTypeDef status;
 
-	uint8_t buffer[3];
+	uint8_t buffer[3]; // creo un buffer de tamaño 3 que contenga el address del registro, y dos bytes para la data que le voy a aescribir a ese registro
 
 	buffer[0] = regAddress;
 

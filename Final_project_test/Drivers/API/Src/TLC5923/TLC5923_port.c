@@ -11,6 +11,10 @@ extern SPI_HandleTypeDef hspi2;
 
 bool writeData(uint8_t*data)
 {
+	if( data == NULL)
+	{
+		return false;
+	}
 	HAL_StatusTypeDef status;
 
 	status = HAL_SPI_Transmit(&hspi2, data, 1, HAL_MAX_DELAY); //envio la data de 16 bits

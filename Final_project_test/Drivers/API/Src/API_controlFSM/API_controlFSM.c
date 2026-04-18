@@ -18,6 +18,7 @@ typedef enum{
 
 static controlState_t statusControlFSM;
 
+static uint16_t ID;
 
 static delay_t delayTemp;
 
@@ -29,7 +30,7 @@ static delay_t delayError;
 
 static tick_t durationDelayTemp = 50; //1 segundo de tiempo base entre mediciones de temperatura
 
-static tick_t durationDelayError = 2000; //1 segundo de tiempo base entre mediciones de temperatura
+static tick_t durationDelayError = 500; //1 segundo de tiempo base entre mediciones de temperatura
 
 static tick_t durationDelayAlert = 300; //1 segundo de tiempo base entre mediciones de temperatura
 
@@ -45,22 +46,37 @@ static float minTemp = 20; //variable que guarda  el valor bajo del rango de tem
 
 float quantityLeds = 8; //cantidad de leds que se iluminan. variable que se usa apra el paso de temperatura dentro del rango
 
+static void controlProcess(void);
+static void normalSequence(void);
+static void coldSequence(void);
+static void errorSequence(void);
+static void hotSequence(void);
+
 void controlInit(void){
 
-	statusControlFSM = CONTROL_IDLE;
-	uint16_t data0 = 0xFFFF;
 	delayInit(&delayTemp,durationDelayTemp);
 	delayInit(&delayError,durationDelayError);
 	delayInit(&delayAlert,durationDelayAlert);
-	TLC5923_setModeDC();
-	TLC5923_enableOutputs();
-	TLC5923_setOutputsDC(data0);
-	TLC5923_setModeOnOff();
+	//inicios de perifericos
+	if(!TLC5923_init())
+	{
+		statusControlFSM = CONTROL_ERROR;
+	}
+	else if(TMP117_readID(&ID) == true) //pido el ID del sensor para verificar que exista
+	{
+		if(ID == 0x117)
+		{
+			statusControlFSM = CONTROL_IDLE;
+		}
+		else
+		{
+			statusControlFSM = CONTROL_ERROR;
+		}
+	}
 }
 
 
 void controlPoll(void){
-
 
 		switch(statusControlFSM){
 		case CONTROL_IDLE:
@@ -236,10 +252,13 @@ static void errorSequence()
 		{
 			if(TLC5923_setOutputsOnOff(dataBlue))
 			{
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
 				flagError = 1;
 			}
 			else
 			{
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
+				flagError = 1;
 				statusControlFSM = CONTROL_ERROR;
 			}
 
@@ -248,11 +267,13 @@ static void errorSequence()
 		{
 			if(TLC5923_setOutputsOnOff(dataGreen))
 			{
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
 				flagError = 0;
 			}
 			else
 			{
-
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
+				flagError = 0;
 				statusControlFSM = CONTROL_ERROR;
 			}
 
@@ -260,6 +281,11 @@ static void errorSequence()
 		}
 	}
 
+}
+
+float getTemp(void)
+{
+	return temperature;
 }
 
 void setMaxTemp(float t)

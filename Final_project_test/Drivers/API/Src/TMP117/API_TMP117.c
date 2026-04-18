@@ -14,6 +14,10 @@
 
 bool TMP117_readTemperature(float *temp){
 
+	if(temp == NULL)
+	{
+		return false;
+	}
 	uint8_t data[2];
 	uint16_t device_temp = 0;
 	float actual_temp = 0;
@@ -23,8 +27,8 @@ bool TMP117_readTemperature(float *temp){
 
 	if (status == true)
 	{
-		  		  device_temp = (data[0] << 8) | data[1];
-		  		  actual_temp = (float)device_temp * 0.0078125f;
+		  		  device_temp = (data[0] << 8) | data[1]; //debo hacer un desplazamiento de 8 posiciones porque el primer byte que se recibe es el MSB y luego hago una OR con el segundo byte (data[1])
+		  		  actual_temp = (float)device_temp * 0.0078125f; //casteo a float para multiplicar por la resolucion (indicado por hoja de datos)
 		  		  *temp = actual_temp;
 		  		  return true;
 	}
@@ -37,17 +41,21 @@ bool TMP117_readTemperature(float *temp){
 
 bool TMP117_readID(uint16_t *id){
 
+	if(id == NULL)
+	{
+		return false;
+	}
 	uint8_t data[2];
 	uint16_t device_id = 0;
 	uint16_t actual_id = 0;
 	bool status;
 
-	status = readRegister(SENSOR_ADDR, ID_ADDR,data);
+	status = readRegister(SENSOR_ADDR, ID_ADDR,data); //leo el ID del sensor y se almacena en data
 
 	if (status == true)
 	{
-		device_id = (data[0] << 8) | data[1];
-		actual_id = device_id & 0x0FFF;
+		device_id = (data[0] << 8) | data[1]; //debo hacer un desplazamiento de 8 posiciones porque el primer byte que se recibe es el MSB y luego hago una OR con el segundo byte (data[1])
+		actual_id = device_id & 0x0FFF; //se enmascara con 12 bits porque el address son los 12 bits LSB, los bits 15 a 12 estan reservados
 		*id = actual_id;
 		return true;
 	}
@@ -55,10 +63,6 @@ bool TMP117_readID(uint16_t *id){
 	{
 		return false;
 	}
-
-	//status = HAL_I2C_Master_Transmit(&hi2c1, SENSOR_ADDR, &reg, 1, HAL_MAX_DELAY);
-
-	//status = HAL_I2C_Master_Receive(&hi2c1, SENSOR_ADDR, data, 2, HAL_MAX_DELAY);// Timeout de 100ms
 
 
 }
