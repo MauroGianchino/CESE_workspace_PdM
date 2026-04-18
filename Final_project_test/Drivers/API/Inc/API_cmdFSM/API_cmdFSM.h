@@ -11,9 +11,9 @@
 #define CMD_MAX_LINE 64 //incluye '/0'
 #define CMD_MAX_TOKENS 3 //COMANDO + maximo 2 argumentos
 
-#include "API_uart.h"
+#include <API_comms.h>
 #include "string.h"
-#include "main.h"
+#include "API_GPIO.h"
 #include "API_controlFSM.h"
 #include <stdint.h>
 #include <stdbool.h>

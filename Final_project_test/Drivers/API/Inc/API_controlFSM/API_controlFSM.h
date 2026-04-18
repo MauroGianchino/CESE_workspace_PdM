@@ -8,14 +8,14 @@
 #ifndef API_INC_API_CONTROLFSM_API_CONTROLFSM_H_
 #define API_INC_API_CONTROLFSM_API_CONTROLFSM_H_
 
+#include <API_comms.h>
 #include "stm32f4xx_hal.h"
 #include "API_delay.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include "API_TMP117.h"
 #include "API_TLC5923.h"
-#include "main.h"
-#include "API_uart.h"
+#include "API_GPIO.h"
 
 /**
  * @brief Inicializa la Máquina de Estados Finitos (FSM) de control.

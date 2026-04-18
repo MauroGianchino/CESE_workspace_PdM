@@ -12,7 +12,7 @@
 #include "stm32f4xx_hal.h"
 #include <stdint.h>
 #include <stdbool.h>
-#include "main.h"
+#include "API_GPIO.h"
 
 /**
  * @brief Inicializa el driver de LEDs TLC5923 con configuración por defecto.

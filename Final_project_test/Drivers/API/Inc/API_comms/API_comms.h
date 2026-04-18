@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "stm32f4xx_hal.h"
+#include "API_GPIO.h"
 
 
 /**
@@ -38,3 +39,31 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size);
  * @param size    Cantidad de bytes que se espera recibir.
  */
 bool uartReceiveStringSize(uint8_t * pstring, uint16_t size);
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void);
+
+/**
+  * @brief I2C3 Initialization Function
+  * @param None
+  * @retval None
+  */
+void I2C3_Init(void);
+
+/**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+void SPI2_Init(void);
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void);
+
+
