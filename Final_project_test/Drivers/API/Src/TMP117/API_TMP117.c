@@ -8,9 +8,15 @@
 #include "API_TMP117.h"
 
 
-#define SENSOR_ADDR (0x49 << 1) // Dirección 0x49 desplazada
+#define SENSOR_ADDR (0x49 << 1) // Dirección 0x49 desplazada por necesidad de la HAL
 #define ID_ADDR 0x0F // Registro de device ID
 #define TEMP_ADDR 0X00 // Registro para leer la temperatura
+#define EEPROM1_ADDR 0x05 //registro de la eeprom 1
+#define EEPROM2_ADDR 0x06 //registro de la eeprom 2
+#define EEPROM3_ADDR 0x08 //registro de la eeprom 3
+#define CONFIG_ADDR 0x01 // registro de configuracion
+#define HIGH_LIMIT_ADDR 0x02 //registro de high temperature
+#define LOW_LIMIT_ADDR  0x03 //registro de low temperature
 
 bool TMP117_readTemperature(float *temp){
 
@@ -66,3 +72,114 @@ bool TMP117_readID(uint16_t *id){
 
 
 }
+
+bool TMP117_writeEEPROM(uint8_t index, uint16_t data) {
+    uint8_t regAddr;
+
+    // Mapeo de índice a dirección de registro
+    switch(index) {
+        case 1: regAddr = EEPROM1_ADDR; break;
+        case 2: regAddr = EEPROM2_ADDR; break;
+        case 3: regAddr = EEPROM3_ADDR; break;
+        default: return false; // Índice inválido
+    }
+
+    if (!writeRegister(SENSOR_ADDR, regAddr, data)) {
+        return false;
+    }
+
+    HAL_Delay(10); //le doy 10ms de delay para que pueda escribir en la eeprom
+
+    return true;
+}
+
+bool TMP117_readEEPROM(uint8_t index, uint16_t *data) {
+    if (data == NULL)
+    {
+    	return false;
+    }
+    uint8_t regAddr;
+    uint8_t rawData[2];
+
+    switch(index) {
+        case 1: regAddr = EEPROM1_ADDR; break;
+        case 2: regAddr = EEPROM2_ADDR; break;
+        case 3: regAddr = EEPROM3_ADDR; break;
+        default: return false;
+    }
+
+    if (readRegister(SENSOR_ADDR, regAddr, rawData)) {
+        *data = (uint16_t)((rawData[0] << 8) | rawData[1]);
+        return true;
+    }
+    return false;
+}
+
+bool TMP117_readConfig(uint16_t *config) {
+    if (config == NULL)
+    {
+        return false;
+    }
+
+    uint8_t data[2];
+    bool status;
+
+    status = readRegister(SENSOR_ADDR, CONFIG_ADDR, data);
+
+    if (status == true) {
+        *config = (uint16_t)((data[0] << 8) | data[1]);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool TMP117_setLimits(float highTemp, float lowTemp) {
+    // El registro es de 16 bits yhago al conversion inversa para guarda el valor
+
+    uint16_t high = (int16_t)(highTemp / 0.0078125f);
+
+    uint16_t low = (int16_t)(lowTemp / 0.0078125f);
+
+    if(writeRegister(SENSOR_ADDR, 0x02, (uint16_t)high))
+    {
+    	if(writeRegister(SENSOR_ADDR, 0x03, (uint16_t)low))
+    	{
+    		return true;
+    	}
+    }
+
+    return false;
+}
+
+bool TMP117_getLimits(float *highTemp, float *lowTemp) {
+    if (highTemp == NULL || lowTemp == NULL)
+    {
+    	return false;
+    }
+
+    uint8_t data[2];
+    int16_t rawLimit;
+
+    // Leer límite alto
+    if (readRegister(SENSOR_ADDR, HIGH_LIMIT_ADDR, data)) {
+        rawLimit = (int16_t)((data[0] << 8) | data[1]);
+        *highTemp = (float)rawLimit * 0.0078125f;
+    }
+    else
+    {
+        return false;
+    }
+
+    // Leer límite bajo
+    if (readRegister(SENSOR_ADDR, LOW_LIMIT_ADDR, data))
+    {
+        rawLimit = (int16_t)((data[0] << 8) | data[1]);
+        *lowTemp = (float)rawLimit * 0.0078125f;
+        return true;
+    }
+
+    return false;
+}
+
+

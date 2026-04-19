@@ -34,4 +34,41 @@ bool TMP117_readID(uint16_t*);
  */
 bool TMP117_readTemperature(float *);
 
+/**
+ * @brief Escribe un valor de 16 bits en uno de los registros de la EEPROM.
+ * @param index Índice de la EEPROM (1, 2 o 3).
+ * @param data Valor a guardar.
+ * @return true si la escritura fue exitosa.
+ */
+bool TMP117_writeEEPROM(uint8_t index, uint16_t data);
+
+/**
+ * @brief Lee un valor de 16 bits de la EEPROM.
+ * @param index Índice de la EEPROM (1, 2 o 3).
+ * @param data Puntero donde se guarda el valor leido
+ */
+bool TMP117_readEEPROM(uint8_t index, uint16_t *data);
+
+/**
+ * @brief Lee el registro de configuración del sensor.
+ * @param[out] config Puntero donde se almacenará el valor de 16 bits del registro.
+ * @return true Si la lectura fue exitosa.
+ */
+bool TMP117_readConfig(uint16_t *config);
+
+/**
+ * @brief Setea los límites de alerta (Temperatura alta/baja).
+ * @param[in] highTemp Temperatura de limite alto
+ * @param[in] lowTemp Temperatura de limite bajo
+ * @return true Si la lectura fue exitosa.
+ */
+bool TMP117_setLimits(float highTemp, float lowTemp);
+
+/**
+ * @brief Lee los límites configurados actualmente en el sensor.
+ * @param[out] highTemp Puntero para almacenar el límite superior en °C.
+ * @param[out] lowTemp Puntero para almacenar el límite inferior en °C.
+ */
+bool TMP117_getLimits(float *highTemp, float *lowTemp);
+
 #endif /* API_INC_API_TMP117_H_ */

@@ -42,11 +42,11 @@ uint8_t flagMax = 0;
 
 float temperature; //variable que guarda la temperatura leida
 
-static float maxTemp = 25; //variable que guarda el valor alto del rango de temperatura
+static float maxTemp = 30; //variable que guarda el valor alto del rango de temperatura
 
 static float minTemp = 20; //variable que guarda  el valor bajo del rango de temperatura
 
-static float alertTemp = 30; //variable que guarda el valor de alerta
+static float alertTemp = 35; //variable que guarda el valor de alerta
 
 float quantityLeds = 8; //cantidad de leds que se iluminan. variable que se usa apra el paso de temperatura dentro del rango
 
@@ -78,6 +78,7 @@ void controlInit(void){
 			statusControlFSM = CONTROL_ERROR;
 		}
 	}
+
 }
 
 
