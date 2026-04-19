@@ -30,19 +30,23 @@ static delay_t delayError;
 
 static tick_t durationDelayTemp = 50; //1 segundo de tiempo base entre mediciones de temperatura
 
-static tick_t durationDelayError = 500; //1 segundo de tiempo base entre mediciones de temperatura
+static tick_t durationDelayError = 800; //1 segundo de tiempo base entre mediciones de temperatura
 
-static tick_t durationDelayAlert = 300; //1 segundo de tiempo base entre mediciones de temperatura
+static tick_t durationDelayAlert = 200; //1 segundo de tiempo base entre mediciones de temperatura
 
 uint8_t flagError = 0;
 
 uint8_t flagAlert = 0;
 
+uint8_t flagMax = 0;
+
 float temperature; //variable que guarda la temperatura leida
 
-static float maxTemp = 30; //variable que guarda el valor alto del rango de temperatura
+static float maxTemp = 25; //variable que guarda el valor alto del rango de temperatura
 
 static float minTemp = 20; //variable que guarda  el valor bajo del rango de temperatura
+
+static float alertTemp = 30; //variable que guarda el valor de alerta
 
 float quantityLeds = 8; //cantidad de leds que se iluminan. variable que se usa apra el paso de temperatura dentro del rango
 
@@ -51,6 +55,7 @@ static void normalSequence(void);
 static void coldSequence(void);
 static void errorSequence(void);
 static void hotSequence(void);
+static void alertSequence(void);
 
 void controlInit(void){
 
@@ -122,14 +127,20 @@ static void controlProcess()
 		normalSequence();
 		return;
 	}
-	if (temperature >= maxTemp)
+
+	if (temperature <= minTemp)
+	{
+		coldSequence();
+		return;
+	}
+	if ((temperature >= maxTemp) && (temperature < alertTemp))
 	{
 		hotSequence();
 		return;
 	}
-	if (temperature <= minTemp)
+	if(temperature >= alertTemp)
 	{
-		coldSequence();
+		alertSequence();
 		return;
 	}
 
@@ -213,11 +224,11 @@ static void hotSequence()
 
 	if(delayRead(&delayAlert))
 	{
-		if( flagAlert == 0)
+		if( flagMax == 0)
 		{
 			if(TLC5923_setOutputsOnOff(dataGreen))
 			{
-				flagAlert = 1;
+				flagMax = 1;
 			}
 			else
 			{
@@ -229,7 +240,7 @@ static void hotSequence()
 		{
 			if(TLC5923_setOutputsOnOff(dataZero))
 			{
-				flagAlert = 0;
+				flagMax = 0;
 			}
 			else
 			{
@@ -283,10 +294,47 @@ static void errorSequence()
 
 }
 
-float getTemp(void)
+static void alertSequence()
 {
-	return temperature;
+	uint16_t dataLight = 0b1111111111111111;
+	uint16_t dataZero = 0b0000000000000000;
+
+	if(delayRead(&delayAlert))
+	{
+		if( flagAlert == 0)
+		{
+			if(TLC5923_setOutputsOnOff(dataLight))
+			{
+				flagAlert = 1;
+			}
+			else
+			{
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_SET);
+				flagAlert = 1;
+				statusControlFSM = CONTROL_ERROR;
+			}
+
+		}
+		else
+		{
+			if(TLC5923_setOutputsOnOff(dataZero))
+			{
+				flagAlert = 0;
+			}
+			else
+			{
+				HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
+				flagAlert = 0;
+				statusControlFSM = CONTROL_ERROR;
+			}
+
+
+		}
+	}
+
 }
+
+
 
 void setMaxTemp(float t)
 {
@@ -298,6 +346,11 @@ void setMinTemp(float t)
 	minTemp = t;
 }
 
+void setAlertTemp(float t)
+{
+	alertTemp = t;
+}
+
 float getMaxTemp(void)
 {
 	return maxTemp;
@@ -306,4 +359,14 @@ float getMaxTemp(void)
 float getMinTemp(void)
 {
 	return minTemp;
+}
+
+float getAlertTemp(void)
+{
+	return alertTemp;
+}
+
+float getTemp(void)
+{
+	return temperature;
 }

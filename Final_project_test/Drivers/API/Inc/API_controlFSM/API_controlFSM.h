@@ -45,6 +45,12 @@ void setMaxTemp(float);
 void setMinTemp(float);
 
 /**
+ * @brief Configura la temperatura de alerta.  Debe ser superior a la maxima del rango
+ * * @param[in] temp Valor float que define la temperatura de alerta
+ */
+void setAlertTemp(float);
+
+/**
  * @brief Obtiene el valor configurado del umbral máximo.
  * * @return float Valor actual de la temperatura máxima de consigna.
  */
@@ -55,6 +61,12 @@ float getMaxTemp(void);
  * * @return float Valor actual de la temperatura mínima de consigna.
  */
 float getMinTemp(void);
+
+/**
+ * @brief Obtiene el valor configurado de alerta
+ * * @return float Valor actual de la temperatura de alerta
+ */
+float getAlertTemp(void);
 
 /**
  * @brief Devuelve la última temperatura leída por el sistema.

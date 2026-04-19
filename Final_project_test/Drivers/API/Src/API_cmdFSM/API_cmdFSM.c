@@ -11,6 +11,8 @@
 
 float temp=0;
 
+float alertTemp=0;
+
 float minRange=0;
 
 float maxRange=0;
@@ -113,7 +115,7 @@ void cmdPoll(void){
 
 void cmdPrintHelp(void){
 
-	uartSendString((uint8_t*)"AYUDA: lista de comandos \r\n GET TEMP \r\n GET RANGE \r\n GET ALERT \r\n SET TL x \r\n SET TH x \r\n HELP\r\n"); // printeo la linea de comandos
+	uartSendString((uint8_t*)"AYUDA: lista de comandos \r\n GET TEMP \r\n GET RANGE \r\n GET ALERT \r\n SET TL x \r\n SET TH x \r\n SET ALERT x \r\n HELP\r\n"); // printeo la linea de comandos
 
 }
 
@@ -144,6 +146,7 @@ static void cmdProcessLine(){
 }
 
 
+
 static void cmdExecute(){
 
 	if (strcasecmp((char*)cmdBuffer, "HELP") == 0) { // comparo de manera case-insensitive con el comando HELP
@@ -159,6 +162,14 @@ static void cmdExecute(){
 		status = CMD_IDLE;
 
 	}
+	else if(strcasecmp((char*)cmdBuffer, "GET ALERT") == 0){ // comparo de manera case-insensitive
+		alertTemp = getAlertTemp();
+		char msg[32]; // Espacio suficiente para el texto y el número
+		snprintf(msg, sizeof(msg), "Alert Temperature: %.2f °C\r\n", alertTemp);
+		uartSendString((uint8_t*)msg);
+		status = CMD_IDLE;
+
+	}
 	else if(strcasecmp((char*)cmdBuffer, "GET RANGE") == 0){ // comparo de manera case-insensitive
 		minRange = getMinTemp();
 		maxRange = getMaxTemp();
@@ -167,10 +178,6 @@ static void cmdExecute(){
 		uartSendString((uint8_t*)msg);
 		status = CMD_IDLE;
 
-	}
-	else if(strcasecmp((char*)cmdBuffer, "GET ALERT") == 0)
-	{ // comparo de manera case-insensitive
-		status = CMD_IDLE;
 	}
 	else if(strncasecmp((char*)cmdBuffer, "SET TL ",7) == 0)
 		{ // Detecto hasta la posición 7 porque luego se encuentra el numero
@@ -181,6 +188,7 @@ static void cmdExecute(){
 			if(ntemp < getMaxTemp())
 			{
 				setMinTemp(ntemp);
+				uartSendString((uint8_t*)"TL configurada correctamente\r\n");
 			}
 			else
 			{
@@ -195,18 +203,42 @@ static void cmdExecute(){
 		status = CMD_IDLE;
 	}
 	else if(strncasecmp((char*)cmdBuffer, "SET TH ",7) == 0)
-		{ // Detecto hasta la posición 7 porque luego se encuentra el numero
+	{ // Detecto hasta la posición 7 porque luego se encuentra el numero
 
 		float ntemp;
 		if(sscanf((char*)cmdBuffer + 7, "%f", &ntemp) == 1)
 		{
-			if(ntemp > getMinTemp())
+			if((ntemp > getMinTemp()) && (ntemp < getAlertTemp()))
 			{
 				setMaxTemp(ntemp);
+				uartSendString((uint8_t*)"TH configurada correctamente\r\n");
 			}
 			else
 			{
-				uartSendString((uint8_t*)"Error: Valor de temperatura TH no puede ser menor o igual a TL\r\n");
+				uartSendString((uint8_t*)"Error: Valor de temperatura TH no puede ser menor o igual a TL ni tampoco mayor que TA\r\n");
+			}
+		}
+
+		else
+		{
+			uartSendString((uint8_t*)"Error: Valor de temperatura invalido\r\n");
+		}
+		status = CMD_IDLE;
+	}
+	else if(strncasecmp((char*)cmdBuffer, "SET TA ",7) == 0)
+	{ // Detecto hasta la posición 10 porque luego se encuentra el numero
+
+		float ntemp;
+		if(sscanf((char*)cmdBuffer + 7, "%f", &ntemp) == 1)
+		{
+			if(ntemp > getMaxTemp())
+			{
+				setAlertTemp(ntemp);
+				uartSendString((uint8_t*)"TA configurada correctamente\r\n");
+			}
+			else
+			{
+				uartSendString((uint8_t*)"Error: Valor de temperatura de Alerta no puede ser menor o igual a TH\r\n");
 			}
 		}
 
