@@ -103,7 +103,7 @@ int main(void)
   cmdInit();
   while (1)
   {
-
+	  //secuencia para apagar los leds con el boton
 	  controlPoll();
 	  cmdPoll();
 	  if(!HAL_GPIO_ReadPin(B1_GPIO_Port,B1_Pin)){

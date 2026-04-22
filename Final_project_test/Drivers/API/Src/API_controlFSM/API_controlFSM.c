@@ -163,7 +163,6 @@ static void normalSequence()
 	}
 	else if(temperature < (minTemp + 2*step))
 	{
-		//HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin,GPIO_PIN_RESET);
 		data = 0b1010000000000000;
 	}
 	else if(temperature < (minTemp + 3*step))
