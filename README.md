@@ -35,6 +35,11 @@ Este repositorio contiene la resolución de las guías prácticas de la cursada.
 * **Estado:** Finalizado.
 * [Ir al código de la Práctica 5](./Practica_5)
 
+### 📁 Trabajo final
+* **Descripción:** Trabajo final de curso. Monitoreo de temperatura con indicación lumínica
+* **Estado:** Finalizado.
+* [Ir al código del trabajo final](./Final_project_Temperature_Monitor)
+
 ---
 
 ## 🛠️ Herramientas Utilizadas
